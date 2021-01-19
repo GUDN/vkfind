@@ -49,6 +49,7 @@ export default {
   plugins: [
     replace({
       'process.env.VK_APP_ID': JSON.stringify(process.env.VK_APP_ID),
+      'process.env.VK_API_VERSION': JSON.stringify(process.env.VK_API_VERSION),
     }),
     svelte({
       preprocess: sveltePreprocess(),

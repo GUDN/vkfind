@@ -1,5 +1,8 @@
 <script lang="ts">
+  import { login } from './vkapi/auth'
   import Searchbar from './Searchbar.svelte'
+
+  login()
 
   function onSearchbar(event: CustomEvent) {
     const value = event.detail as string
