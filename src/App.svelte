@@ -1,1 +1,1 @@
-<main>VKFind App</main>
+<h1>VKFind App</h1>
