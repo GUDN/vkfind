@@ -8,6 +8,6 @@
 </script>
 
 <main class="container">
-  <h1>VKFind App</h1>
+  <h1>VKFind</h1>
   <Searchbar on:search={onSearchbar} />
 </main>
