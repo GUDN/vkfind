@@ -1,3 +1,5 @@
+import { getBaseInfo } from '../vkapi/getBaseInfo'
+
 import { writable } from 'svelte/store'
 
 export interface BasePerson {
@@ -5,6 +7,8 @@ export interface BasePerson {
   key: number
   value?: string
   userId?: number
+  closed?: boolean
+  error: boolean
 }
 
 export enum Gender {
@@ -30,11 +34,23 @@ export const basePersons = (() => {
     subscribe,
     clear: () => set([]),
     removeEmpty: () => update(arr => arr.filter(val => !!val.raw)),
-    addEmpty: () => update(arr => [...arr, { raw: '', key: Date.now() }]),
+    addEmpty: () =>
+      update(arr => [...arr, { raw: '', key: Date.now(), error: false }]),
     update: (i: number, raw: string) =>
       update(arr => {
         arr[i].raw = raw
-        arr[i].value = arr[i].raw + '!' // TODO fetch userId and name from vkapi
+        getBaseInfo(raw).then(result => {
+          if (result == null) {
+            arr[i].value = 'Пользователь не найден'
+            arr[i].error = true
+            return
+          }
+          arr[i].value = result.value
+          arr[i].closed = result.closed
+          arr[i].userId = result.userId
+          arr[i].error = false
+          update(arr => arr)
+        })
         return arr
       }),
     remove: (i: number) =>
