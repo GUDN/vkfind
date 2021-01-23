@@ -61,7 +61,7 @@
       </div>
     </div>
     <div class="col s12">
-      {#each $basePersons as { error, value, key }, i (key)}
+      {#each $basePersons as { raw, error, value, key }, i (key)}
         <div class="row valign-wrapper">
           <div class="input-field col s10">
             <i class="material-icons prefix">person</i>
@@ -80,6 +80,7 @@
               on:change={event => {
                 basePersons.update(i, event.currentTarget.value)
               }}
+              value={raw}
               class:invalid={error}
             />
             <label for={`search-extra-base-${i}`}>{i + 1}</label>
