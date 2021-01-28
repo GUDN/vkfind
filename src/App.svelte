@@ -2,20 +2,12 @@
   import { login } from './vkapi/auth'
   import Search from './Search.svelte'
   import { onMount } from 'svelte'
-  import {
-    age,
-    gender,
-    name,
-    realCity,
-    settedCity,
-  } from './stores/searchOptions'
+  import { search } from './engine'
 
   login()
 
   function onSearch() {
-    console.log(
-      `Searching ${$name} (${$gender}, ${$age}, ${$settedCity}, ${$realCity})`
-    )
+    search()
   }
 
   onMount(() => {

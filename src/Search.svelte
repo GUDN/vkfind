@@ -15,7 +15,16 @@
   <div class="row valign-wrapper">
     <div class="input-field">
       <i class="material-icons prefix">person_search</i>
-      <input placeholder="Enter name..." bind:value={$name} />
+      <input
+        placeholder="Enter name..."
+        bind:value={$name}
+        on:keydown={e => {
+          if (e.key == 'Enter') {
+            dispatch('search')
+            e.preventDefault()
+          }
+        }}
+      />
     </div>
     <div class="col">
       <button
