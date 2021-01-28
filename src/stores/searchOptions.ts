@@ -19,11 +19,19 @@ export enum Gender {
 }
 
 export const name = (() => {
-  const { subscribe, set } = writable('')
+  const store = writable<string[]>([])
 
   return {
-    subscribe,
-    set,
+    subscribe(callback: (arg: string) => void) {
+      return store.subscribe(value => callback(value.join(' ')))
+    },
+    set(value: string) {
+      let splitted = value
+        .split(' ')
+        .filter(v => v.length > 0)
+        .slice(0, 2)
+      store.set(splitted)
+    },
   }
 })()
 
