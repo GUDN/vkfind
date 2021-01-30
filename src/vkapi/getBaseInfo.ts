@@ -22,7 +22,7 @@ export async function getBaseInfo(
   }
   return {
     value,
-    userId: user.used_id as number,
+    userId: user.id as number,
     closed: !(user.can_access_closed as boolean),
   }
 }
