@@ -1,3 +1,4 @@
+import { qfetch } from '../utils/networkQueue'
 import { makeUrl } from './utils'
 
 export async function getBaseInfo(
@@ -7,7 +8,7 @@ export async function getBaseInfo(
     raw = raw.slice(7)
   }
   const url = makeUrl('users.get', [['user_ids', raw]])
-  const resp = await fetch(url)
+  const resp = await qfetch(url)
   if (!resp.ok) {
     return null
   }
@@ -23,6 +24,6 @@ export async function getBaseInfo(
   return {
     value,
     userId: user.id as number,
-    closed: !(user.can_access_closed as boolean),
+    closed: !(user.can_access_closed as boolean) || 'deactivated' in user,
   }
 }

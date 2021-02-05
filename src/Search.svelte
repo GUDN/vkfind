@@ -43,13 +43,6 @@
 <SearchExtra bind:this={extra} />
 
 <style>
-  form {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-
   div.row {
     margin-bottom: 0;
   }

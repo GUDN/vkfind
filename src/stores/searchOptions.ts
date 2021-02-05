@@ -2,7 +2,7 @@ import { getBaseInfo } from '../vkapi/getBaseInfo'
 
 import { writable } from 'svelte/store'
 
-export interface BasePerson {
+interface BasePerson {
   raw: string
   key: number
   value?: string
@@ -32,6 +32,7 @@ export const name = (() => {
         .slice(0, 2)
       store.set(splitted)
     },
+    rawSubscribe: store.subscribe,
   }
 })()
 

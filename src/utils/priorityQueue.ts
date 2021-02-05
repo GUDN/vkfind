@@ -1,6 +1,6 @@
 declare type Comparator<T> = (a: T, b: T) => number
 
-export class Heap<T> {
+export default class Queue<T> {
   private comparator: Comparator<T>
   private heap: T[]
 
@@ -66,5 +66,9 @@ export class Heap<T> {
     }
     this.heap[pos] = newItem
     this.siftdown(startPos, pos)
+  }
+
+  clear() {
+    this.heap = []
   }
 }
