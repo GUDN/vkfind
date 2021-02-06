@@ -8,7 +8,7 @@
     <p>
       {result.name} (<a href="https://vk.com/id{result.userId}"
         >{result.userId}</a
-      >)
+      >, {result.probability})
     </p>
   {/each}
 </div>
