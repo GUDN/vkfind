@@ -27,6 +27,7 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
+    "fuzzyset.js": "^1.0.6",
     "materialize-css": "^1.0.0-rc.2",
     "sirv-cli": "^1.0.0"
   }

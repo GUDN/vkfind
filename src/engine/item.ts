@@ -25,13 +25,20 @@ export class Item implements VKUser {
   calcProbability() {
     let result = -Math.round(this.distance ** 2)
     // TODO extract 100 to options
-    result += 5 * Number(this.firstName == options.firstName)
-    result += 30 * Number(this.lastName == options.lastName)
-    result +=
-      50 *
-      Number(
-        this.firstName == options.firstName && this.lastName == options.lastName
-      )
+    const firstName: [number, string][] = options.firstNames.get(
+      this.firstName,
+      []
+    )
+    const lastName: [number, string][] = options.lastNames.get(
+      this.lastName,
+      []
+    )
+    if (firstName.length > 0) {
+      result += 10 * firstName[0][0]
+    }
+    if (lastName.length > 0) {
+      result += 30 * lastName[0][0]
+    }
     this._probability = result
   }
 

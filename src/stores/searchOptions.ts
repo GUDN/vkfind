@@ -26,10 +26,7 @@ export const name = (() => {
       return store.subscribe(value => callback(value.join(' ')))
     },
     set(value: string) {
-      let splitted = value
-        .split(' ')
-        .filter(v => v.length > 0)
-        .slice(0, 2)
+      let splitted = value.split(' ').filter(v => v.length > 0)
       store.set(splitted)
     },
     rawSubscribe: store.subscribe,

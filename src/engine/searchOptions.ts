@@ -1,3 +1,4 @@
+import FuzzySet from 'fuzzyset.js'
 import { get } from 'svelte/store'
 import * as rawOptions from '../stores/searchOptions'
 
@@ -7,8 +8,8 @@ interface BasePerson {
 }
 
 export interface SearchOptions {
-  firstName: string
-  lastName: string
+  firstNames: FuzzySet
+  lastNames: FuzzySet
   basePersons: Set<BasePerson>
 }
 
@@ -25,9 +26,15 @@ export function initOptions() {
       closed: person.closed,
     })
   }
+  const firstNames = name
+    .filter(val => !val.startsWith('#'))
+    .map(val => (val.startsWith('@') ? val.slice(1) : val))
+  const lastNames = name
+    .filter(val => !val.startsWith('@'))
+    .map(val => (val.startsWith('#') ? val.slice(1) : val))
   options = {
-    firstName: name[0],
-    lastName: name[1],
+    firstNames: new FuzzySet(firstNames),
+    lastNames: new FuzzySet(lastNames),
     basePersons,
   }
 }

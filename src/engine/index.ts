@@ -53,7 +53,6 @@ export class SearchEngine {
       .sort((a, b) => b.probability - a.probability)
       .slice(0, 10)
     resultsStore.set(this._results)
-    // console.log(this.works)
     if (this.works) {
       setTimeout(this.doIteration.bind(this), 100)
     }
