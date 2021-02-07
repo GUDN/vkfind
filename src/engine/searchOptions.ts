@@ -11,6 +11,7 @@ export interface SearchOptions {
   firstNames: FuzzySet
   lastNames: FuzzySet
   basePersons: Set<BasePerson>
+  distancePenalty: (x: number) => number
 }
 
 export let options: SearchOptions = null
@@ -18,6 +19,17 @@ export let options: SearchOptions = null
 export function initOptions() {
   let name: string[]
   rawOptions.name.rawSubscribe(arg => (name = arg))()
+  const firstNames = new FuzzySet(
+    name
+      .filter(val => !val.startsWith('#'))
+      .map(val => (val.startsWith('@') ? val.slice(1) : val))
+  )
+  const lastNames = new FuzzySet(
+    name
+      .filter(val => !val.startsWith('@'))
+      .map(val => (val.startsWith('#') ? val.slice(1) : val))
+  )
+
   const basePersons: Set<BasePerson> = new Set()
   for (const person of get(rawOptions.basePersons)) {
     if (person.error || !person.userId) continue
@@ -26,15 +38,16 @@ export function initOptions() {
       closed: person.closed,
     })
   }
-  const firstNames = name
-    .filter(val => !val.startsWith('#'))
-    .map(val => (val.startsWith('@') ? val.slice(1) : val))
-  const lastNames = name
-    .filter(val => !val.startsWith('@'))
-    .map(val => (val.startsWith('#') ? val.slice(1) : val))
+
+  const n = 3 / 4
+  const c = 3
+  const distancePenalty = (x: number) =>
+    Math.abs(c * x - x ** 2) + x ** 2 - x * (c - n)
+
   options = {
-    firstNames: new FuzzySet(firstNames),
-    lastNames: new FuzzySet(lastNames),
+    firstNames,
+    lastNames,
     basePersons,
+    distancePenalty,
   }
 }

@@ -23,7 +23,7 @@ export class Item implements VKUser {
   }
 
   calcProbability() {
-    let result = -Math.round(this.distance ** 2)
+    let result = -options.distancePenalty(this.distance)
     const lastName: [number, string][] = options.lastNames.get(
       this.lastName,
       []
