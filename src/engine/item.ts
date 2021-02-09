@@ -1,3 +1,4 @@
+import type { Gender } from '../stores/searchOptions'
 import type { User as VKUser } from '../vkapi/user'
 import { options } from './options'
 
@@ -5,6 +6,7 @@ export class Item implements VKUser {
   userId: number
   firstName: string
   lastName: string
+  gender: Gender
 
   closed: boolean
 
@@ -16,6 +18,7 @@ export class Item implements VKUser {
     this.firstName = user.firstName
     this.lastName = user.lastName
     this.closed = user.closed
+    this.gender = user.gender
 
     this.distance = Math.max(distance, 0)
 
@@ -25,6 +28,7 @@ export class Item implements VKUser {
   calcProbability() {
     let result = options.distanceScore(this.distance)
     result += options.lastNameScore(this.lastName)
+    result += options.genderScore(this.gender)
     this._probability = result
   }
 

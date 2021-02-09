@@ -1,5 +1,6 @@
 import FuzzySet from 'fuzzyset.js'
 import { get } from 'svelte/store'
+import { Gender } from '../stores/searchOptions'
 import * as rawOptions from '../stores/searchOptions'
 import { userId } from '../vkapi/auth'
 
@@ -13,6 +14,7 @@ export interface SearchOptions {
   lastNameScore: (name: string) => number
   basePersons: Set<BasePerson>
   distanceScore: (x: number) => number
+  genderScore: (gender: Gender) => number
 }
 
 export let options: SearchOptions = null
@@ -53,6 +55,10 @@ export function initOptions() {
   const distanceScore = (x: number) =>
     -(Math.abs(c * x - x ** 2) + x ** 2 - x * (c - n))
 
+  const gender = get(rawOptions.gender)
+  const genderScore =
+    gender == Gender.Unknown ? _ => 0 : (x: Gender) => (x == gender ? 5 : -1)
+
   options = {
     firstNameScore: name => {
       const names: [number, string][] = firstNamesSet.get(name, [])
@@ -70,5 +76,6 @@ export function initOptions() {
     },
     basePersons,
     distanceScore,
+    genderScore,
   }
 }

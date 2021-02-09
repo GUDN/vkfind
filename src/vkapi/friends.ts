@@ -1,6 +1,7 @@
 import type { User } from './user'
 import { qfetch } from '../utils/networkQueue'
 import { makeUrl } from './utils'
+import { Gender } from '../stores/searchOptions'
 
 const FRIENDS_BY_RESPONSE = (5000).toString()
 
@@ -43,12 +44,24 @@ export async function getFriends(user: User): Promise<User[]> {
       throw new Error(content.error.error_msg)
     }
     for (const friend of content.response.items) {
+      let gender: Gender
+      switch (friend.sex as number) {
+        case 1:
+          gender = Gender.Female
+          break
+        case 2:
+          gender = Gender.Male
+        default:
+          gender = Gender.Unsetted
+          break
+      }
       result.push({
         firstName: friend.first_name,
         lastName: friend.last_name,
         closed:
           !(friend.can_access_closed as boolean) || 'deactivated' in friend,
         userId: friend.id,
+        gender,
       })
     }
   }
