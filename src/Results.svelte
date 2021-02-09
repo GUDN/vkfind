@@ -1,6 +1,5 @@
 <script lang="ts">
   import { results } from './stores/searchResults'
-  import { userId } from './vkapi/auth'
 </script>
 
 <div>
