@@ -1,5 +1,5 @@
 import type { User as VKUser } from '../vkapi/user'
-import { options } from './searchOptions'
+import { options } from './options'
 
 export class Item implements VKUser {
   userId: number
@@ -23,15 +23,8 @@ export class Item implements VKUser {
   }
 
   calcProbability() {
-    let result = -options.distancePenalty(this.distance)
-    const lastName: [number, string][] = options.lastNames.get(
-      this.lastName,
-      []
-    )
-    if (lastName.length > 0) {
-      // TODO extract coef to options
-      result += 30 * lastName[0][0]
-    }
+    let result = options.distanceScore(this.distance)
+    result += options.lastNameScore(this.lastName)
     this._probability = result
   }
 

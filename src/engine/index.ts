@@ -3,7 +3,7 @@ import { getUser } from '../vkapi/user'
 import { getFriends } from '../vkapi/friends'
 import { compare, Item } from './item'
 import { Result } from './result'
-import { initOptions, options, SearchOptions } from './searchOptions'
+import { initOptions, options, SearchOptions } from './options'
 import { results as resultsStore } from '../stores/searchResults'
 
 let queue = new Queue(compare)
