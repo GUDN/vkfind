@@ -1,4 +1,3 @@
-import { basePersons } from '../stores/searchOptions'
 interface AccessTokenEntry {
   accessToken: string
   expiresAt: number
@@ -75,6 +74,4 @@ export function login() {
   if (token == null) requestAccessToken()
   accessToken = token.accessToken
   userId = token.userId
-  basePersons.addEmpty()
-  basePersons.update(0, userId.toString())
 }

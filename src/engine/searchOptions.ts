@@ -1,6 +1,7 @@
 import FuzzySet from 'fuzzyset.js'
 import { get } from 'svelte/store'
 import * as rawOptions from '../stores/searchOptions'
+import { userId } from '../vkapi/auth'
 
 interface BasePerson {
   userId: number
@@ -36,6 +37,12 @@ export function initOptions() {
     basePersons.add({
       userId: person.userId,
       closed: person.closed,
+    })
+  }
+  if (basePersons.size == 0) {
+    basePersons.add({
+      userId: userId,
+      closed: false,
     })
   }
 
