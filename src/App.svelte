@@ -12,6 +12,7 @@
   let engine: SearchEngine = null
 
   function onSearch() {
+    engine?.stop()
     engine = null
     search()
       .then(engine_ => {
