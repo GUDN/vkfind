@@ -7,6 +7,7 @@ export class Item implements VKUser {
   firstName: string
   lastName: string
   gender: Gender
+  photo: string
 
   closed: boolean
 
@@ -19,6 +20,7 @@ export class Item implements VKUser {
     this.lastName = user.lastName
     this.closed = user.closed
     this.gender = user.gender
+    this.photo = user.photo
 
     this.distance = Math.max(distance, 0)
 

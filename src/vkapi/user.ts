@@ -7,6 +7,7 @@ export interface User {
   firstName: string
   lastName: string
   gender: Gender
+  photo: string
 
   closed: boolean
 
@@ -16,7 +17,7 @@ export interface User {
 export async function getUser(userId: number): Promise<User> {
   const url = makeUrl('users.get', [
     ['user_ids', userId.toString()],
-    ['fields', 'sex'],
+    ['fields', 'sex,photo_50'],
   ])
   const resp = await qfetch(url)
   if (!resp.ok) {
@@ -45,6 +46,7 @@ export async function getUser(userId: number): Promise<User> {
     userId: userId,
     closed: !(user.can_access_closed as boolean) || 'deactivated' in user,
     gender,
+    photo: user.photo_50,
   }
 }
 

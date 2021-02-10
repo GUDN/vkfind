@@ -1,14 +1,11 @@
 <script lang="ts">
   import { results } from './stores/searchResults'
+  import Result from './Result.svelte'
 </script>
 
 <div>
   {#each $results as result (result.userId)}
-    <p>
-      {result.name} (<a href="https://vk.com/id{result.userId}"
-        >{result.userId}</a
-      >, {result.probability})
-    </p>
+    <Result user={result} />
   {/each}
 </div>
 
