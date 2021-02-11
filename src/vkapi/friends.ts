@@ -12,7 +12,7 @@ export async function getFriends(user: User): Promise<User[]> {
   const resp = await qfetch(
     makeUrl('friends.get', [
       ['user_id', user.userId.toString()],
-      ['fields', 'sex,photo_50'],
+      ['fields', 'sex'],
       ['count', '1'],
     ])
   )
@@ -32,7 +32,7 @@ export async function getFriends(user: User): Promise<User[]> {
       ['user_id', user.userId.toString()],
       ['count', FRIENDS_BY_RESPONSE],
       ['offset', result.length.toString()],
-      ['fields', 'sex,photo_50'],
+      ['fields', 'sex,photo_50,city'],
     ])
     const resp = await qfetch(url)
     if (!resp.ok) {
@@ -55,14 +55,15 @@ export async function getFriends(user: User): Promise<User[]> {
           gender = Gender.Unsetted
           break
       }
+      const isDeactivated = 'deactivated' in friend
       result.push({
         firstName: friend.first_name,
         lastName: friend.last_name,
-        closed:
-          !(friend.can_access_closed as boolean) || 'deactivated' in friend,
+        closed: !(friend.can_access_closed as boolean) || isDeactivated,
         userId: friend.id,
         gender,
         photo: friend.photo_50,
+        settedCity: isDeactivated || !friend.city ? null : friend?.city.title,
       })
     }
   }

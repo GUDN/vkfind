@@ -8,6 +8,7 @@ export class Item implements VKUser {
   lastName: string
   gender: Gender
   photo: string
+  settedCity: string | null
 
   closed: boolean
 
@@ -21,6 +22,7 @@ export class Item implements VKUser {
     this.closed = user.closed
     this.gender = user.gender
     this.photo = user.photo
+    this.settedCity = user.settedCity
 
     this.distance = Math.max(distance, 0)
 
@@ -31,6 +33,7 @@ export class Item implements VKUser {
     let result = options.distanceScore(this.distance)
     result += options.lastNameScore(this.lastName)
     result += options.genderScore(this.gender)
+    result += options.settedCityScore(this.settedCity)
     this._probability = result
   }
 

@@ -15,6 +15,7 @@ export interface SearchOptions {
   basePersons: Set<BasePerson>
   distanceScore: (x: number) => number
   genderScore: (gender: Gender) => number
+  settedCityScore: (settedCity: string | null) => number
 }
 
 export let options: SearchOptions = null
@@ -57,7 +58,17 @@ export function initOptions() {
 
   const gender = get(rawOptions.gender)
   const genderScore =
-    gender == Gender.Unknown ? _ => 0 : (x: Gender) => (x == gender ? 5 : -1)
+    gender == Gender.Unknown
+      ? (_: any) => 0
+      : (x: Gender) => (x == gender ? 5 : -1)
+
+  const settedCity = get(rawOptions.settedCity)
+  const settedCityScore = settedCity
+    ? (x: string | null) => {
+        if (x == null) return 0
+        return x == settedCity ? 5 : -3
+      }
+    : (_: string) => 0
 
   options = {
     firstNameScore: name => {
@@ -77,5 +88,6 @@ export function initOptions() {
     basePersons,
     distanceScore,
     genderScore,
+    settedCityScore,
   }
 }

@@ -10,7 +10,9 @@
         <div class="card-content">
           <img src={user.photo} class="circle" alt="" />
           <h5 class="center-align">
-            {user.name}, (probability: {user.probability.toFixed(3)})
+            {user.name}, ({user.settedCity ?? 'город не указан'}, probability: {user.probability.toFixed(
+              3
+            )})
           </h5>
         </div>
         <div class="card-action">
