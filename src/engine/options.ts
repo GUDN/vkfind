@@ -25,7 +25,8 @@ export function initOptions() {
   rawOptions.name.rawSubscribe(arg => (name = arg))()
   const firstNamesSet = new FuzzySet()
   const lastNamesSet = new FuzzySet()
-  for (const val of name) {
+  for (let val of name) {
+    val = val.toLowerCase()
     if (val.startsWith('@')) {
       firstNamesSet.add(val.slice(1))
     } else if (val.startsWith('#')) {
@@ -62,16 +63,17 @@ export function initOptions() {
       ? (_: any) => 0
       : (x: Gender) => (x == gender ? 5 : -1)
 
-  const settedCity = get(rawOptions.settedCity)
+  const settedCity = get(rawOptions.settedCity).toLowerCase()
   const settedCityScore = settedCity
     ? (x: string | null) => {
         if (x == null) return 0
-        return x == settedCity ? 5 : -3
+        return x.toLowerCase() == settedCity ? 5 : -3
       }
     : (_: string) => 0
 
   options = {
     firstNameScore: name => {
+      name = name.toLowerCase()
       const names: [number, string][] = firstNamesSet.get(name, [])
       if (names.length > 0) {
         return 20 * names[0][0] + 15 * Number(names[0][1] == name)
@@ -79,6 +81,7 @@ export function initOptions() {
       return 0
     },
     lastNameScore: name => {
+      name = name.toLowerCase()
       const names: [number, string][] = lastNamesSet.get(name, [])
       if (names.length > 0) {
         return 30 * names[0][0] + 10 * Number(names[0][1] == name)
