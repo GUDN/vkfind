@@ -1,5 +1,5 @@
 import Queue from '../utils/priorityQueue'
-import { getUser } from '../vkapi/user'
+import { getUsers } from '../vkapi/user'
 import { getFriends } from '../vkapi/friends'
 import { compare, Item } from './item'
 import { Result } from './result'
@@ -86,16 +86,15 @@ export async function search(): Promise<SearchEngine> {
   const basePersons = Array.from(options.basePersons)
   if (basePersons.length == 0) {
     throw new Error('Не указаны отправные точки')
-  } else if (basePersons.length == 1) {
-    if (!basePersons[0].closed) {
-      const user = await getUser(basePersons[0].userId)
-      const item = new Item(user, 0)
+  } else {
+    // TODO add mutual friends
+    for (const user of await getUsers(
+      basePersons.map(person => person.userId)
+    )) {
+      const item = new Item(user, 0, 1000)
       viewed.add(user.userId)
       queue.push(item)
     }
-  } else {
-    // Сначала добавить общих друзей, потом их самих
-    throw new Error('Not implemented')
   }
   if (queue.length == 0) {
     throw new Error('Нет доступных отправных точек')

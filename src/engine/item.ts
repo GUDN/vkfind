@@ -15,7 +15,7 @@ export class Item implements VKUser {
   distance: number
   protected _probability: number
 
-  constructor(user: VKUser, distance: number) {
+  constructor(user: VKUser, distance: number, bonus = 0) {
     this.userId = user.userId
     this.firstName = user.firstName
     this.lastName = user.lastName
@@ -27,6 +27,7 @@ export class Item implements VKUser {
     this.distance = Math.max(distance, 0)
 
     this.calcProbability()
+    this._probability += bonus
   }
 
   calcProbability() {
