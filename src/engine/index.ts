@@ -88,7 +88,6 @@ export async function search(): Promise<SearchEngine> {
   if (basePersons.length == 0) {
     throw new Error('Не указаны отправные точки')
   } else {
-    // TODO add mutual friends
     const baseUsers = await getUsers(basePersons.map(person => person.userId))
     for (const [user, bonus] of await getMutual(baseUsers)) {
       const item = new Item(user, 0, bonus * 50)
