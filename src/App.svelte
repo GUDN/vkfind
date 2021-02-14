@@ -13,6 +13,7 @@
 
   function onSearch() {
     engine?.stop()
+    headerText = 'Initializing search'
     engine = null
     search()
       .then(engine_ => {
