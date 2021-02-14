@@ -20,7 +20,7 @@ function requestAccessToken() {
   const redirectUri = `${loc.protocol}//${loc.host}${loc.pathname}`
   document.location.replace(
     // @ts-ignore
-    `https://oauth.vk.com/authorize?client_id=${process.env.VK_APP_ID}&display=page&redirect_uri=${redirectUri}&response_type=token&v=${process.env.VK_API_VERSION}`
+    `https://oauth.vk.com/authorize?scope=2&client_id=${process.env.VK_APP_ID}&display=page&redirect_uri=${redirectUri}&response_type=token&v=${process.env.VK_API_VERSION}`
   )
 }
 

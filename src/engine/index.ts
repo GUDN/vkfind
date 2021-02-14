@@ -5,6 +5,7 @@ import { compare, Item } from './item'
 import { Result } from './result'
 import { initOptions, options, SearchOptions } from './options'
 import { results as resultsStore } from '../stores/searchResults'
+import { getMutual } from '../vkapi/mutual'
 
 let queue = new Queue(compare)
 let viewed = new Set<number>()
@@ -88,10 +89,14 @@ export async function search(): Promise<SearchEngine> {
     throw new Error('Не указаны отправные точки')
   } else {
     // TODO add mutual friends
-    for (const user of await getUsers(
-      basePersons.map(person => person.userId)
-    )) {
-      const item = new Item(user, 0, 1000)
+    const baseUsers = await getUsers(basePersons.map(person => person.userId))
+    for (const [user, bonus] of await getMutual(baseUsers)) {
+      const item = new Item(user, 0, bonus * 50)
+      viewed.add(user.userId)
+      queue.push(item)
+    }
+    for (const user of baseUsers) {
+      const item = new Item(user, 0, 49)
       viewed.add(user.userId)
       queue.push(item)
     }
