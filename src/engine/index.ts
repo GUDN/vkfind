@@ -62,7 +62,21 @@ export class SearchEngine {
   async process(item: Item): Promise<Result> {
     console.debug(item)
     const friends = await getFriends(item)
+
+    const cities: Map<string, number> = new Map()
+    let bestCity = null
+    let bestCityValue = -1
+
     for (const friend of friends) {
+      const city = friend.settedCity
+      if (city) {
+        const cityValue = (cities.get(city) ?? 0) + 1
+        cities.set(city, cityValue)
+        if (cityValue > bestCityValue) {
+          bestCity = city
+          bestCityValue = cityValue
+        }
+      }
       if (viewed.has(friend.userId)) {
         continue
       }
@@ -70,7 +84,7 @@ export class SearchEngine {
       queue.push(friendItem)
       viewed.add(friend.userId)
     }
-    return new Result({ ...item }, item.distance)
+    return new Result(item, bestCity)
   }
 
   get isWorking(): boolean {

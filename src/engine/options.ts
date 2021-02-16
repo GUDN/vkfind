@@ -16,6 +16,7 @@ export interface SearchOptions {
   distanceScore: (x: number) => number
   genderScore: (gender: Gender) => number
   settedCityScore: (settedCity: string | null) => number
+  realCityScore: (realCity: string | null) => number
 }
 
 export let options: SearchOptions = null
@@ -71,6 +72,14 @@ export function initOptions() {
       }
     : (_: string) => 0
 
+  const realCity = get(rawOptions.realCity).toLowerCase() || settedCity
+  const realCityScore = realCity
+    ? (x: string | null) => {
+        if (x == null) return 0
+        return x.toLowerCase() == realCity ? 5 : -3
+      }
+    : (_: string) => 0
+
   options = {
     firstNameScore: name => {
       name = name.toLowerCase()
@@ -92,5 +101,6 @@ export function initOptions() {
     distanceScore,
     genderScore,
     settedCityScore,
+    realCityScore,
   }
 }
