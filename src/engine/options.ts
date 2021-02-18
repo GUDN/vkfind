@@ -1,9 +1,11 @@
 import FuzzySet from 'fuzzyset.js'
+import CyrillicToTranslit from 'cyrillic-to-translit-js'
 import { get } from 'svelte/store'
 import { Gender } from '../stores/searchOptions'
 import * as rawOptions from '../stores/searchOptions'
 import { userId } from '../vkapi/auth'
 
+const cyrillicToTranslit = new CyrillicToTranslit()
 interface BasePerson {
   userId: number
   closed: boolean
@@ -28,13 +30,27 @@ export function initOptions() {
   const lastNamesSet = new FuzzySet()
   for (let val of name) {
     val = val.toLowerCase()
-    if (val.startsWith('@')) {
-      firstNamesSet.add(val.slice(1))
+    if (val.startsWith('@!')) {
+      firstNamesSet.add(val.slice(2))
+    } else if (val.startsWith('#!')) {
+      lastNamesSet.add(val.slice(2))
+    } else if (val.startsWith('@')) {
+      val = val.slice(1)
+      firstNamesSet.add(val)
+      firstNamesSet.add(cyrillicToTranslit.transform(val))
     } else if (val.startsWith('#')) {
-      lastNamesSet.add(val.slice(1))
+      val = val.slice(1)
+      lastNamesSet.add(val)
+      lastNamesSet.add(cyrillicToTranslit.transform(val))
+    } else if (val.startsWith('!')) {
+      val = val.slice(1)
+      firstNamesSet.add(val)
+      lastNamesSet.add(val)
     } else {
       firstNamesSet.add(val)
       lastNamesSet.add(val)
+      firstNamesSet.add(cyrillicToTranslit.transform(val))
+      lastNamesSet.add(cyrillicToTranslit.transform(val))
     }
   }
 
