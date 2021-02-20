@@ -1,6 +1,6 @@
 import { Gender } from '../stores/searchOptions'
 import { qfetch } from '../utils/networkQueue'
-import { makeUrl } from './utils'
+import { bdate2age, makeUrl } from './utils'
 
 export interface User {
   userId: number
@@ -9,10 +9,9 @@ export interface User {
   gender: Gender
   photo: string
   settedCity: string | null
+  age: number
 
   closed: boolean
-
-  // TODO add another field
 }
 
 export async function getUsers(userIds: number[]): Promise<User[]> {
@@ -23,7 +22,7 @@ export async function getUsers(userIds: number[]): Promise<User[]> {
         'user_ids',
         userIds.slice(result.length, result.length + 1000).join(','),
       ],
-      ['fields', 'sex,photo_50,city'],
+      ['fields', 'sex,photo_50,city,bdate'],
     ])
     const resp = await qfetch(url)
     if (!resp.ok) {
@@ -47,6 +46,10 @@ export async function getUsers(userIds: number[]): Promise<User[]> {
           break
       }
       const isDeactivated = 'deactivated' in user
+      let age = -1
+      if ('bdate' in user) {
+        age = bdate2age(user.bdate as string)
+      }
       result.push({
         firstName: user.first_name,
         lastName: user.last_name,
@@ -55,6 +58,7 @@ export async function getUsers(userIds: number[]): Promise<User[]> {
         gender,
         photo: user.photo_50,
         settedCity: isDeactivated || !user.city ? null : user.city.title,
+        age,
       })
     }
   }

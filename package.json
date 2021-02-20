@@ -32,6 +32,7 @@
     "cyrillic-to-translit-js": "^3.1.0",
     "fuzzyset.js": "^1.0.6",
     "materialize-css": "^1.0.0-rc.2",
+    "moment": "^2.29.1",
     "sirv-cli": "^1.0.0"
   }
 }

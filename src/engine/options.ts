@@ -19,6 +19,7 @@ export interface SearchOptions {
   genderScore: (gender: Gender) => number
   settedCityScore: (settedCity: string | null) => number
   realCityScore: (realCity: string | null) => number
+  ageScore: (age: number) => number
 }
 
 export let options: SearchOptions = null
@@ -96,6 +97,17 @@ export function initOptions() {
       }
     : (_: string) => 0
 
+  const age = get(rawOptions.age)
+  const ageScore =
+    age == -1
+      ? (_: number) => 0
+      : (x: number) => {
+          if (x == -1) return 0
+          const diff = Math.abs(x - age)
+          if (diff > 5) return -diff
+          else return Math.max(5 - diff) * 3
+        }
+
   options = {
     firstNameScore: name => {
       name = name.toLowerCase()
@@ -118,5 +130,6 @@ export function initOptions() {
     genderScore,
     settedCityScore,
     realCityScore,
+    ageScore,
   }
 }

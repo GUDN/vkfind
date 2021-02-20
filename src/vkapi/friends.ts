@@ -1,6 +1,6 @@
 import type { User } from './user'
 import { qfetch } from '../utils/networkQueue'
-import { makeUrl } from './utils'
+import { bdate2age, makeUrl } from './utils'
 import { Gender } from '../stores/searchOptions'
 
 const FRIENDS_BY_RESPONSE = (5000).toString()
@@ -32,7 +32,7 @@ export async function getFriends(user: User): Promise<User[]> {
       ['user_id', user.userId.toString()],
       ['count', FRIENDS_BY_RESPONSE],
       ['offset', result.length.toString()],
-      ['fields', 'sex,photo_50,city'],
+      ['fields', 'sex,photo_50,city,bdate'],
     ])
     const resp = await qfetch(url)
     if (!resp.ok) {
@@ -56,6 +56,11 @@ export async function getFriends(user: User): Promise<User[]> {
           break
       }
       const isDeactivated = 'deactivated' in friend
+      let age = -1
+      if ('bdate' in friend) {
+        age = bdate2age(friend.bdate as string)
+        console.log(friend, age)
+      }
       result.push({
         firstName: friend.first_name,
         lastName: friend.last_name,
@@ -64,6 +69,7 @@ export async function getFriends(user: User): Promise<User[]> {
         gender,
         photo: friend.photo_50,
         settedCity: isDeactivated || !friend.city ? null : friend?.city.title,
+        age,
       })
     }
   }
