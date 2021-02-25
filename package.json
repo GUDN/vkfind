@@ -34,5 +34,6 @@
     "materialize-css": "^1.0.0-rc.2",
     "moment": "^2.29.1",
     "sirv-cli": "^1.0.0"
-  }
+  },
+  "license": "MIT"
 }
