@@ -12,12 +12,7 @@ export async function getMutual(users: User[]): Promise<Map<User, number>> {
         ['source_uid', sourceId],
         ['target_uids', userIds.slice(i * 100, (i + 1) * 100).join(',')],
       ])
-      const resp = await qfetch(url)
-      if (!resp.ok) {
-        console.error('Cannot make query')
-        return new Map()
-      }
-      const content = await resp.json()
+      const content = await qfetch(url)
       if (content.error) {
         console.error('Cannot make query')
         return new Map()

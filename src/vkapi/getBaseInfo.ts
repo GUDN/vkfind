@@ -8,11 +8,7 @@ export async function getBaseInfo(
     raw = raw.slice(7)
   }
   const url = makeUrl('users.get', [['user_ids', raw]])
-  const resp = await qfetch(url)
-  if (!resp.ok) {
-    return null
-  }
-  const content = await resp.json()
+  const content = await qfetch(url)
   if (content.error) {
     return null
   }

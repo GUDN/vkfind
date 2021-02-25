@@ -9,18 +9,13 @@ export async function getFriends(user: User): Promise<User[]> {
   if (user.closed) {
     return []
   }
-  const resp = await qfetch(
+  const content = await qfetch(
     makeUrl('friends.get', [
       ['user_id', user.userId.toString()],
       ['fields', 'sex'],
       ['count', '1'],
     ])
   )
-  if (!resp.ok) {
-    console.error('Cannot fetch friends first response')
-    return []
-  }
-  const content = await resp.json()
   if (content.error) {
     console.error(user, content.error.error_msg)
     throw new Error(content.error.error_msg)
@@ -34,11 +29,7 @@ export async function getFriends(user: User): Promise<User[]> {
       ['offset', result.length.toString()],
       ['fields', 'sex,photo_50,city,bdate'],
     ])
-    const resp = await qfetch(url)
-    if (!resp.ok) {
-      console.error('Cannot make query')
-    }
-    const content = await resp.json()
+    const content = await qfetch(url)
     if (content.error) {
       console.error(content.error.error_msg)
       throw new Error(content.error.error_msg)

@@ -4,8 +4,11 @@ interface Query {
   reject: (reason: any) => void
 }
 
+let current: Query = null
 let queue: Query[] = []
 let interval: number = null
+let currentElem: HTMLScriptElement = null
+const head = document.getElementsByTagName('head')[0]
 
 export function qfetch(url: string): Promise<any> {
   return new Promise((resolve, reject) => {
@@ -18,15 +21,24 @@ export function qfetch(url: string): Promise<any> {
 }
 
 function doIteration() {
-  if (queue.length == 0) {
+  if (queue.length == 0 || current != null) {
     return
   }
-  const item = queue.splice(0, 1)[0]
-  try {
-    fetch(item.url).then(item.resolve, item.reject)
-  } catch (e) {
-    item.reject(e)
+  current = queue.splice(0, 1)[0]
+  currentElem = document.createElement('script')
+  currentElem.src = current.url + '&callback=window.callbackFunc'
+  head.appendChild(currentElem)
+}
+
+// @ts-ignore
+window.callbackFunc = (resp: any) => {
+  if (current == null) {
+    return
   }
+  current.resolve(resp)
+  current = null
+  head.removeChild(currentElem)
+  currentElem = null
 }
 
 export function start(delay = 400) {

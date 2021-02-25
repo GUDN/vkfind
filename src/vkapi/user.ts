@@ -24,11 +24,7 @@ export async function getUsers(userIds: number[]): Promise<User[]> {
       ],
       ['fields', 'sex,photo_50,city,bdate'],
     ])
-    const resp = await qfetch(url)
-    if (!resp.ok) {
-      throw new Error('VK API error')
-    }
-    const content = await resp.json()
+    const content = await qfetch(url)
     if (content.error) {
       throw new Error(content.error.error_msg)
     }
